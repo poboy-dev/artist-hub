@@ -9,8 +9,56 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VideosRouteImport } from './routes/videos'
+import { Route as TourRouteImport } from './routes/tour'
+import { Route as StoreRouteImport } from './routes/store'
+import { Route as NewsRouteImport } from './routes/news'
+import { Route as MusicRouteImport } from './routes/music'
+import { Route as FanClubRouteImport } from './routes/fan-club'
+import { Route as CompositionsRouteImport } from './routes/compositions'
+import { Route as BioRouteImport } from './routes/bio'
 import { Route as IndexRouteImport } from './routes/index'
 
+const VideosRoute = VideosRouteImport.update({
+  id: '/videos',
+  path: '/videos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TourRoute = TourRouteImport.update({
+  id: '/tour',
+  path: '/tour',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StoreRoute = StoreRouteImport.update({
+  id: '/store',
+  path: '/store',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsRoute = NewsRouteImport.update({
+  id: '/news',
+  path: '/news',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MusicRoute = MusicRouteImport.update({
+  id: '/music',
+  path: '/music',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FanClubRoute = FanClubRouteImport.update({
+  id: '/fan-club',
+  path: '/fan-club',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompositionsRoute = CompositionsRouteImport.update({
+  id: '/compositions',
+  path: '/compositions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BioRoute = BioRouteImport.update({
+  id: '/bio',
+  path: '/bio',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +67,144 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/bio': typeof BioRoute
+  '/compositions': typeof CompositionsRoute
+  '/fan-club': typeof FanClubRoute
+  '/music': typeof MusicRoute
+  '/news': typeof NewsRoute
+  '/store': typeof StoreRoute
+  '/tour': typeof TourRoute
+  '/videos': typeof VideosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/bio': typeof BioRoute
+  '/compositions': typeof CompositionsRoute
+  '/fan-club': typeof FanClubRoute
+  '/music': typeof MusicRoute
+  '/news': typeof NewsRoute
+  '/store': typeof StoreRoute
+  '/tour': typeof TourRoute
+  '/videos': typeof VideosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/bio': typeof BioRoute
+  '/compositions': typeof CompositionsRoute
+  '/fan-club': typeof FanClubRoute
+  '/music': typeof MusicRoute
+  '/news': typeof NewsRoute
+  '/store': typeof StoreRoute
+  '/tour': typeof TourRoute
+  '/videos': typeof VideosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/bio'
+    | '/compositions'
+    | '/fan-club'
+    | '/music'
+    | '/news'
+    | '/store'
+    | '/tour'
+    | '/videos'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/bio'
+    | '/compositions'
+    | '/fan-club'
+    | '/music'
+    | '/news'
+    | '/store'
+    | '/tour'
+    | '/videos'
+  id:
+    | '__root__'
+    | '/'
+    | '/bio'
+    | '/compositions'
+    | '/fan-club'
+    | '/music'
+    | '/news'
+    | '/store'
+    | '/tour'
+    | '/videos'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BioRoute: typeof BioRoute
+  CompositionsRoute: typeof CompositionsRoute
+  FanClubRoute: typeof FanClubRoute
+  MusicRoute: typeof MusicRoute
+  NewsRoute: typeof NewsRoute
+  StoreRoute: typeof StoreRoute
+  TourRoute: typeof TourRoute
+  VideosRoute: typeof VideosRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/videos': {
+      id: '/videos'
+      path: '/videos'
+      fullPath: '/videos'
+      preLoaderRoute: typeof VideosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tour': {
+      id: '/tour'
+      path: '/tour'
+      fullPath: '/tour'
+      preLoaderRoute: typeof TourRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/store': {
+      id: '/store'
+      path: '/store'
+      fullPath: '/store'
+      preLoaderRoute: typeof StoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/news': {
+      id: '/news'
+      path: '/news'
+      fullPath: '/news'
+      preLoaderRoute: typeof NewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/music': {
+      id: '/music'
+      path: '/music'
+      fullPath: '/music'
+      preLoaderRoute: typeof MusicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fan-club': {
+      id: '/fan-club'
+      path: '/fan-club'
+      fullPath: '/fan-club'
+      preLoaderRoute: typeof FanClubRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compositions': {
+      id: '/compositions'
+      path: '/compositions'
+      fullPath: '/compositions'
+      preLoaderRoute: typeof CompositionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bio': {
+      id: '/bio'
+      path: '/bio'
+      fullPath: '/bio'
+      preLoaderRoute: typeof BioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +217,14 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BioRoute: BioRoute,
+  CompositionsRoute: CompositionsRoute,
+  FanClubRoute: FanClubRoute,
+  MusicRoute: MusicRoute,
+  NewsRoute: NewsRoute,
+  StoreRoute: StoreRoute,
+  TourRoute: TourRoute,
+  VideosRoute: VideosRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
