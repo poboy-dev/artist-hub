@@ -1,6 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader } from "@/components/PageHeader";
-import { news, formatDate } from "@/lib/site-data";
+import { formatDate } from "@/lib/site-data";
+import { getPublicNews } from "@/lib/public-data.functions";
+import { queryOptions } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
+
+const newsQueryOptions = () =>
+  queryOptions({
+    queryKey: ["public", "news"],
+    queryFn: () => getPublicNews(),
+  });
 
 export const Route = createFileRoute("/news")({
   head: () => ({
@@ -11,10 +20,13 @@ export const Route = createFileRoute("/news")({
       { property: "og:description", content: "Tour announcements, album drops and updates." },
     ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(newsQueryOptions()),
   component: NewsPage,
 });
 
 function NewsPage() {
+  const { data: news } = useSuspenseQuery(newsQueryOptions());
+
   return (
     <>
       <PageHeader eyebrow="03 · News" title="Dispatch">
@@ -22,7 +34,7 @@ function NewsPage() {
       </PageHeader>
       <section className="px-6 py-24">
         <div className="mx-auto max-w-4xl">
-          {news.map((n) => (
+          {(news ?? []).map((n) => (
             <article
               key={n.slug}
               className="border-t border-border py-12 last:border-b"
