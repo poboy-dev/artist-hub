@@ -1,9 +1,28 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import heroImg from "@/assets/hero.jpg";
 import sheetImg from "@/assets/sheet.jpg";
-import { albums, news, tourDates, formatDate, videos } from "@/lib/site-data";
+import { formatDate } from "@/lib/site-data";
+import { getPublicAlbums, getPublicNews, getPublicTourDates, getPublicVideos } from "@/lib/public-data.functions";
+import { getAlbumCover, getVideoThumb } from "@/lib/db-images";
+import { queryOptions } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
+
+const homeQueryOptions = () =>
+  queryOptions({
+    queryKey: ["home"],
+    queryFn: async () => {
+      const [albumsData, newsData, tourData, videosData] = await Promise.all([
+        getPublicAlbums(),
+        getPublicNews(),
+        getPublicTourDates(),
+        getPublicVideos(),
+      ]);
+      return { albums: albumsData, news: newsData, tour: tourData, videos: videosData };
+    },
+  });
 
 export const Route = createFileRoute("/")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(homeQueryOptions()),
   component: Index,
 });
 
