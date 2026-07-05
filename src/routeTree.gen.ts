@@ -17,7 +17,19 @@ import { Route as MusicRouteImport } from './routes/music'
 import { Route as FanClubRouteImport } from './routes/fan-club'
 import { Route as CompositionsRouteImport } from './routes/compositions'
 import { Route as BioRouteImport } from './routes/bio'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedAdminVideosRouteImport } from './routes/_authenticated/admin/videos'
+import { Route as AuthenticatedAdminTourRouteImport } from './routes/_authenticated/admin/tour'
+import { Route as AuthenticatedAdminStoreRouteImport } from './routes/_authenticated/admin/store'
+import { Route as AuthenticatedAdminOrdersRouteImport } from './routes/_authenticated/admin/orders'
+import { Route as AuthenticatedAdminNewsRouteImport } from './routes/_authenticated/admin/news'
+import { Route as AuthenticatedAdminMusicRouteImport } from './routes/_authenticated/admin/music'
+import { Route as AuthenticatedAdminFanClubRouteImport } from './routes/_authenticated/admin/fan-club'
+import { Route as AuthenticatedAdminCompositionsRouteImport } from './routes/_authenticated/admin/compositions'
 
 const VideosRoute = VideosRouteImport.update({
   id: '/videos',
@@ -59,14 +71,78 @@ const BioRoute = BioRouteImport.update({
   path: '/bio',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminVideosRoute =
+  AuthenticatedAdminVideosRouteImport.update({
+    id: '/videos',
+    path: '/videos',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminTourRoute = AuthenticatedAdminTourRouteImport.update({
+  id: '/tour',
+  path: '/tour',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminStoreRoute = AuthenticatedAdminStoreRouteImport.update({
+  id: '/store',
+  path: '/store',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminOrdersRoute =
+  AuthenticatedAdminOrdersRouteImport.update({
+    id: '/orders',
+    path: '/orders',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminNewsRoute = AuthenticatedAdminNewsRouteImport.update({
+  id: '/news',
+  path: '/news',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminMusicRoute = AuthenticatedAdminMusicRouteImport.update({
+  id: '/music',
+  path: '/music',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminFanClubRoute =
+  AuthenticatedAdminFanClubRouteImport.update({
+    id: '/fan-club',
+    path: '/fan-club',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminCompositionsRoute =
+  AuthenticatedAdminCompositionsRouteImport.update({
+    id: '/compositions',
+    path: '/compositions',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/bio': typeof BioRoute
   '/compositions': typeof CompositionsRoute
   '/fan-club': typeof FanClubRoute
@@ -75,9 +151,20 @@ export interface FileRoutesByFullPath {
   '/store': typeof StoreRoute
   '/tour': typeof TourRoute
   '/videos': typeof VideosRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/admin/compositions': typeof AuthenticatedAdminCompositionsRoute
+  '/admin/fan-club': typeof AuthenticatedAdminFanClubRoute
+  '/admin/music': typeof AuthenticatedAdminMusicRoute
+  '/admin/news': typeof AuthenticatedAdminNewsRoute
+  '/admin/orders': typeof AuthenticatedAdminOrdersRoute
+  '/admin/store': typeof AuthenticatedAdminStoreRoute
+  '/admin/tour': typeof AuthenticatedAdminTourRoute
+  '/admin/videos': typeof AuthenticatedAdminVideosRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/bio': typeof BioRoute
   '/compositions': typeof CompositionsRoute
   '/fan-club': typeof FanClubRoute
@@ -86,10 +173,21 @@ export interface FileRoutesByTo {
   '/store': typeof StoreRoute
   '/tour': typeof TourRoute
   '/videos': typeof VideosRoute
+  '/admin/compositions': typeof AuthenticatedAdminCompositionsRoute
+  '/admin/fan-club': typeof AuthenticatedAdminFanClubRoute
+  '/admin/music': typeof AuthenticatedAdminMusicRoute
+  '/admin/news': typeof AuthenticatedAdminNewsRoute
+  '/admin/orders': typeof AuthenticatedAdminOrdersRoute
+  '/admin/store': typeof AuthenticatedAdminStoreRoute
+  '/admin/tour': typeof AuthenticatedAdminTourRoute
+  '/admin/videos': typeof AuthenticatedAdminVideosRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
   '/bio': typeof BioRoute
   '/compositions': typeof CompositionsRoute
   '/fan-club': typeof FanClubRoute
@@ -98,11 +196,22 @@ export interface FileRoutesById {
   '/store': typeof StoreRoute
   '/tour': typeof TourRoute
   '/videos': typeof VideosRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/_authenticated/admin/compositions': typeof AuthenticatedAdminCompositionsRoute
+  '/_authenticated/admin/fan-club': typeof AuthenticatedAdminFanClubRoute
+  '/_authenticated/admin/music': typeof AuthenticatedAdminMusicRoute
+  '/_authenticated/admin/news': typeof AuthenticatedAdminNewsRoute
+  '/_authenticated/admin/orders': typeof AuthenticatedAdminOrdersRoute
+  '/_authenticated/admin/store': typeof AuthenticatedAdminStoreRoute
+  '/_authenticated/admin/tour': typeof AuthenticatedAdminTourRoute
+  '/_authenticated/admin/videos': typeof AuthenticatedAdminVideosRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/bio'
     | '/compositions'
     | '/fan-club'
@@ -111,9 +220,20 @@ export interface FileRouteTypes {
     | '/store'
     | '/tour'
     | '/videos'
+    | '/admin'
+    | '/admin/compositions'
+    | '/admin/fan-club'
+    | '/admin/music'
+    | '/admin/news'
+    | '/admin/orders'
+    | '/admin/store'
+    | '/admin/tour'
+    | '/admin/videos'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/bio'
     | '/compositions'
     | '/fan-club'
@@ -122,9 +242,20 @@ export interface FileRouteTypes {
     | '/store'
     | '/tour'
     | '/videos'
+    | '/admin/compositions'
+    | '/admin/fan-club'
+    | '/admin/music'
+    | '/admin/news'
+    | '/admin/orders'
+    | '/admin/store'
+    | '/admin/tour'
+    | '/admin/videos'
+    | '/admin'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
+    | '/auth'
     | '/bio'
     | '/compositions'
     | '/fan-club'
@@ -133,10 +264,22 @@ export interface FileRouteTypes {
     | '/store'
     | '/tour'
     | '/videos'
+    | '/_authenticated/admin'
+    | '/_authenticated/admin/compositions'
+    | '/_authenticated/admin/fan-club'
+    | '/_authenticated/admin/music'
+    | '/_authenticated/admin/news'
+    | '/_authenticated/admin/orders'
+    | '/_authenticated/admin/store'
+    | '/_authenticated/admin/tour'
+    | '/_authenticated/admin/videos'
+    | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
   BioRoute: typeof BioRoute
   CompositionsRoute: typeof CompositionsRoute
   FanClubRoute: typeof FanClubRoute
@@ -205,6 +348,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BioRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -212,11 +369,121 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/videos': {
+      id: '/_authenticated/admin/videos'
+      path: '/videos'
+      fullPath: '/admin/videos'
+      preLoaderRoute: typeof AuthenticatedAdminVideosRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/tour': {
+      id: '/_authenticated/admin/tour'
+      path: '/tour'
+      fullPath: '/admin/tour'
+      preLoaderRoute: typeof AuthenticatedAdminTourRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/store': {
+      id: '/_authenticated/admin/store'
+      path: '/store'
+      fullPath: '/admin/store'
+      preLoaderRoute: typeof AuthenticatedAdminStoreRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/orders': {
+      id: '/_authenticated/admin/orders'
+      path: '/orders'
+      fullPath: '/admin/orders'
+      preLoaderRoute: typeof AuthenticatedAdminOrdersRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/news': {
+      id: '/_authenticated/admin/news'
+      path: '/news'
+      fullPath: '/admin/news'
+      preLoaderRoute: typeof AuthenticatedAdminNewsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/music': {
+      id: '/_authenticated/admin/music'
+      path: '/music'
+      fullPath: '/admin/music'
+      preLoaderRoute: typeof AuthenticatedAdminMusicRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/fan-club': {
+      id: '/_authenticated/admin/fan-club'
+      path: '/fan-club'
+      fullPath: '/admin/fan-club'
+      preLoaderRoute: typeof AuthenticatedAdminFanClubRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/compositions': {
+      id: '/_authenticated/admin/compositions'
+      path: '/compositions'
+      fullPath: '/admin/compositions'
+      preLoaderRoute: typeof AuthenticatedAdminCompositionsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
   }
 }
 
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminCompositionsRoute: typeof AuthenticatedAdminCompositionsRoute
+  AuthenticatedAdminFanClubRoute: typeof AuthenticatedAdminFanClubRoute
+  AuthenticatedAdminMusicRoute: typeof AuthenticatedAdminMusicRoute
+  AuthenticatedAdminNewsRoute: typeof AuthenticatedAdminNewsRoute
+  AuthenticatedAdminOrdersRoute: typeof AuthenticatedAdminOrdersRoute
+  AuthenticatedAdminStoreRoute: typeof AuthenticatedAdminStoreRoute
+  AuthenticatedAdminTourRoute: typeof AuthenticatedAdminTourRoute
+  AuthenticatedAdminVideosRoute: typeof AuthenticatedAdminVideosRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminCompositionsRoute: AuthenticatedAdminCompositionsRoute,
+  AuthenticatedAdminFanClubRoute: AuthenticatedAdminFanClubRoute,
+  AuthenticatedAdminMusicRoute: AuthenticatedAdminMusicRoute,
+  AuthenticatedAdminNewsRoute: AuthenticatedAdminNewsRoute,
+  AuthenticatedAdminOrdersRoute: AuthenticatedAdminOrdersRoute,
+  AuthenticatedAdminStoreRoute: AuthenticatedAdminStoreRoute,
+  AuthenticatedAdminTourRoute: AuthenticatedAdminTourRoute,
+  AuthenticatedAdminVideosRoute: AuthenticatedAdminVideosRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
   BioRoute: BioRoute,
   CompositionsRoute: CompositionsRoute,
   FanClubRoute: FanClubRoute,

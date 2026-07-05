@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const links = [
   { to: "/music", label: "Music" },
@@ -13,6 +14,16 @@ const links = [
 
 export function SiteNav() {
   const [open, setOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    const { data } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => data.subscription.unsubscribe();
+  }, []);
+
   return (
     <nav className="fixed top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
@@ -30,6 +41,14 @@ export function SiteNav() {
               {l.label}
             </Link>
           ))}
+          {user && (
+            <Link
+              to="/admin"
+              className="text-primary transition-colors hover:text-primary/80"
+            >
+              Admin
+            </Link>
+          )}
         </div>
         <div className="flex items-center gap-3">
           <Link
@@ -62,6 +81,11 @@ export function SiteNav() {
                 {l.label}
               </Link>
             ))}
+            {user && (
+              <Link to="/admin" onClick={() => setOpen(false)} className="text-primary">
+                Admin
+              </Link>
+            )}
           </div>
         </div>
       )}

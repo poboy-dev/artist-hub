@@ -1,97 +1,81 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { PageHeader } from "@/components/PageHeader";
-import { albums } from "@/lib/site-data";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { getPublicAlbums } from "@/lib/public-data.functions";
+import { getAlbumCover } from "@/lib/db-images";
+import { queryOptions } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { albums as staticAlbums } from "@/lib/site-data";
+import album1 from "@/assets/album-1.jpg";
+import album2 from "@/assets/album-2.jpg";
+import album3 from "@/assets/album-3.jpg";
+
+const staticCovers: Record<string, string> = {
+  "golden-horizon": album1,
+  "lagos-after-dark": album2,
+  "echoes-of-sahel": album3,
+};
+
+const albumsQueryOptions = () =>
+  queryOptions({
+    queryKey: ["public", "albums"],
+    queryFn: () => getPublicAlbums(),
+  });
 
 export const Route = createFileRoute("/music")({
-  head: () => ({
-    meta: [
-      { title: "Music — SOLARI" },
-      { name: "description", content: "Full discography, streaming links and purchase options for every SOLARI release." },
-      { property: "og:title", content: "Music — SOLARI" },
-      { property: "og:description", content: "Full discography from SOLARI. Stream and buy." },
-    ],
-  }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(albumsQueryOptions()),
   component: MusicPage,
 });
 
 function MusicPage() {
+  const { data: dbAlbums } = useSuspenseQuery(albumsQueryOptions());
+  const albums = dbAlbums ?? [];
+
   return (
-    <>
-      <PageHeader eyebrow="01 · Music" title="Discography">
-        Every era. Every release. Stream, download or order physical formats.
-      </PageHeader>
-      <section className="px-6 py-24">
-        <div className="mx-auto max-w-7xl space-y-24">
-          {albums.map((a, i) => (
-            <article
-              key={a.slug}
-              className={`grid items-center gap-12 md:grid-cols-2 ${
-                i % 2 ? "md:[direction:rtl]" : ""
-              }`}
-            >
-              <div className="[direction:ltr]">
+    <div className="px-6 py-32">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-16">
+          <p className="mb-3 font-mono text-xs uppercase tracking-[0.3em] text-primary">Music</p>
+          <h1 className="font-display text-6xl uppercase tracking-tighter md:text-8xl">Discography</h1>
+        </div>
+        <div className="space-y-24">
+          {albums.map((album) => (
+            <div key={album.slug} className="grid items-center gap-12 md:grid-cols-2">
+              <div className="relative aspect-square overflow-hidden bg-neutral-900">
                 <img
-                  src={a.cover}
-                  alt={a.title}
+                  src={getAlbumCover(album.slug, album.cover_url) || staticCovers[album.slug] || ""}
+                  alt={album.title}
                   width={800}
                   height={800}
                   loading="lazy"
-                  className="aspect-square w-full object-cover"
+                  className="h-full w-full object-cover"
                 />
               </div>
-              <div className="[direction:ltr]">
-                <p className="mb-3 font-mono text-xs uppercase tracking-[0.3em] text-primary">
-                  {a.year} · {a.type} · {a.tracks} Tracks
+              <div>
+                <p className="mb-4 font-mono text-xs uppercase tracking-[0.3em] text-primary">
+                  {album.year} · {album.type} · {album.tracks} Tracks
                 </p>
-                <h2 className="mb-6 font-display text-5xl uppercase tracking-tighter md:text-7xl">
-                  {a.title}
+                <h2 className="mb-6 font-display text-5xl uppercase tracking-tighter">
+                  {album.title}
                 </h2>
-                <p className="mb-10 max-w-md text-muted">{a.tagline}</p>
-                {/* Audio streaming */}
-                <div className="mb-8">
-                  <p className="mb-3 font-mono text-[10px] uppercase tracking-widest text-muted">
-                    Preview
-                  </p>
-                  <audio
-                    controls
-                    className="w-full max-w-md"
-                    preload="none"
-                  >
-                    <source src="" type="audio/mpeg" />
-                    Your browser does not support audio playback.
-                  </audio>
-                </div>
+                <p className="mb-8 max-w-md text-muted">{album.tagline}</p>
                 <div className="flex flex-wrap gap-3">
                   <a
-                    href={a.stream}
+                    href={album.stream_url ?? "#"}
                     className="bg-primary px-6 py-3 text-xs font-bold uppercase tracking-widest text-primary-foreground"
                   >
-                    Spotify
+                    Stream
                   </a>
                   <a
-                    href={a.stream}
-                    className="border border-border px-6 py-3 text-xs font-bold uppercase tracking-widest hover:border-primary hover:text-primary"
+                    href={album.buy_url ?? "#"}
+                    className="border border-foreground px-6 py-3 text-xs font-bold uppercase tracking-widest text-foreground"
                   >
-                    Apple Music
-                  </a>
-                  <a
-                    href={a.stream}
-                    className="border border-border px-6 py-3 text-xs font-bold uppercase tracking-widest hover:border-primary hover:text-primary"
-                  >
-                    YouTube
-                  </a>
-                  <a
-                    href={a.buy}
-                    className="border border-primary px-6 py-3 text-xs font-bold uppercase tracking-widest text-primary"
-                  >
-                    Buy Album →
+                    Buy
                   </a>
                 </div>
               </div>
-            </article>
+            </div>
           ))}
         </div>
-      </section>
-    </>
+      </div>
+    </div>
   );
 }
