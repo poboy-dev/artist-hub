@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
+import { z } from "zod";
 
 function getPublicClient() {
   return createClient<Database>(
@@ -57,3 +58,12 @@ export const getPublicCompositions = createServerFn({ method: "GET" }).handler(a
   if (error) throw error;
   return data ?? [];
 });
+
+export const joinFanClub = createServerFn({ method: "POST" })
+  .inputValidator((data: unknown) => z.object({ email: z.string().email() }).parse(data))
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.from("fan_club_members").insert({ email: data.email });
+    if (error) throw error;
+    return { ok: true };
+  });
