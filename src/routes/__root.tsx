@@ -13,6 +13,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteNav } from "../components/SiteNav";
 import { SiteFooter } from "../components/SiteFooter";
 import { FanClubBar } from "../components/FanClubBar";
+import { supabase } from "@/integrations/supabase/client";
 
 function NotFoundComponent() {
   return (
