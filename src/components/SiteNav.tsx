@@ -14,7 +14,7 @@ const links = [
 
 export function SiteNav() {
   const [open, setOpen] = useState(false);
-  const [user, setUser] = useState<ReturnType<typeof supabase.auth.getUser> extends Promise<infer R> ? R["data"]["user"] : null>(null);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user));
