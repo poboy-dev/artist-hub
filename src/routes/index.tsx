@@ -27,6 +27,12 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const { data } = useSuspenseQuery(homeQueryOptions());
+  const albums = data?.albums ?? [];
+  const news = data?.news ?? [];
+  const tourDates = data?.tour ?? [];
+  const videos = data?.videos ?? [];
+
   const latest = albums[0];
   const upcoming = tourDates.slice(0, 4);
 
@@ -47,16 +53,16 @@ function Index() {
         <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-24">
           <div className="animate-reveal">
             <p className="mb-4 font-mono text-xs uppercase tracking-[0.3em] text-primary">
-              The New Era · {latest.type} · {latest.year}
+              The New Era · {latest?.type ?? "LP"} · {latest?.year ?? 2024}
             </p>
             <h1 className="mb-6 text-balance font-display text-[15vw] uppercase leading-[0.85] tracking-tighter md:text-[10rem]">
               Golden <br />
               Horizon
             </h1>
-            <p className="mb-8 max-w-xl text-muted">{latest.tagline}</p>
+            <p className="mb-8 max-w-xl text-muted">{latest?.tagline ?? "The new era. Out now."}</p>
             <div className="flex flex-wrap gap-4">
               <a
-                href={latest.stream}
+                href={latest?.stream_url ?? "#"}
                 className="bg-foreground px-8 py-4 text-xs font-bold uppercase tracking-widest text-background transition-colors hover:bg-primary"
               >
                 Listen Now
@@ -118,7 +124,7 @@ function Index() {
               <div key={a.slug} className="group min-w-[300px] snap-start">
                 <div className="relative mb-6 aspect-square overflow-hidden bg-neutral-900">
                   <img
-                    src={a.cover}
+                    src={getAlbumCover(a.slug, a.cover_url)}
                     alt={a.title}
                     width={800}
                     height={800}
@@ -159,40 +165,42 @@ function Index() {
             </Link>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
-            <a
-              href={`https://youtube.com/watch?v=${videos[0].youtubeId}`}
-              target="_blank"
-              rel="noreferrer"
-              className="group relative col-span-1 aspect-video overflow-hidden bg-neutral-900 md:col-span-2 md:row-span-2 md:aspect-auto"
-            >
-              <img
-                src={videos[0].thumb}
-                alt={videos[0].title}
-                width={1280}
-                height={720}
-                loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-              <div className="absolute bottom-8 left-8 right-8">
-                <p className="mb-2 font-mono text-[10px] uppercase tracking-widest text-primary">
-                  Now playing
-                </p>
-                <h3 className="font-display text-3xl uppercase tracking-tighter">
-                  {videos[0].title}
-                </h3>
-              </div>
-            </a>
+            {videos[0] && (
+              <a
+                href={`https://youtube.com/watch?v=${videos[0].youtube_id}`}
+                target="_blank"
+                rel="noreferrer"
+                className="group relative col-span-1 aspect-video overflow-hidden bg-neutral-900 md:col-span-2 md:row-span-2 md:aspect-auto"
+              >
+                <img
+                  src={getVideoThumb(videos[0].youtube_id, videos[0].thumb_url)}
+                  alt={videos[0].title}
+                  width={1280}
+                  height={720}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+                <div className="absolute bottom-8 left-8 right-8">
+                  <p className="mb-2 font-mono text-[10px] uppercase tracking-widest text-primary">
+                    Now playing
+                  </p>
+                  <h3 className="font-display text-3xl uppercase tracking-tighter">
+                    {videos[0].title}
+                  </h3>
+                </div>
+              </a>
+            )}
             {videos.slice(1, 3).map((v) => (
               <a
                 key={v.id}
-                href={`https://youtube.com/watch?v=${v.youtubeId}`}
+                href={`https://youtube.com/watch?v=${v.youtube_id}`}
                 target="_blank"
                 rel="noreferrer"
                 className="group relative aspect-video overflow-hidden bg-neutral-900"
               >
                 <img
-                  src={v.thumb}
+                  src={getVideoThumb(v.youtube_id, v.thumb_url)}
                   alt={v.title}
                   width={1280}
                   height={720}
@@ -255,7 +263,7 @@ function Index() {
           <div>
             {upcoming.map((t, i) => (
               <div
-                key={i}
+                key={t.id ?? i}
                 className="group flex flex-wrap items-center justify-between gap-4 border-t border-border px-4 py-8 transition-colors last:border-b hover:bg-white/5"
               >
                 <div className="flex flex-col">
@@ -281,7 +289,7 @@ function Index() {
                     </span>
                   ) : (
                     <a
-                      href={t.ticketUrl}
+                      href={t.ticket_url ?? "#"}
                       className="text-xs font-bold uppercase tracking-widest underline-offset-4 group-hover:underline"
                     >
                       Tickets →
