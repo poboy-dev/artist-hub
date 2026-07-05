@@ -1,7 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader } from "@/components/PageHeader";
-import { videos, albums } from "@/lib/site-data";
 import { useState } from "react";
+import { getPublicVideos, getPublicAlbums } from "@/lib/public-data.functions";
+import { getAlbumCover, getVideoThumb } from "@/lib/db-images";
+import { queryOptions } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
+
+const videosQueryOptions = () =>
+  queryOptions({
+    queryKey: ["public", "videos"],
+    queryFn: async () => {
+      const [videosData, albumsData] = await Promise.all([getPublicVideos(), getPublicAlbums()]);
+      return { videos: videosData, albums: albumsData };
+    },
+  });
 
 export const Route = createFileRoute("/videos")({
   head: () => ({
@@ -12,10 +24,14 @@ export const Route = createFileRoute("/videos")({
       { property: "og:description", content: "Music videos and era galleries." },
     ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(videosQueryOptions()),
   component: VideosPage,
 });
 
 function VideosPage() {
+  const { data } = useSuspenseQuery(videosQueryOptions());
+  const videos = data?.videos ?? [];
+  const albums = data?.albums ?? [];
   const [era, setEra] = useState<string>("All");
   const eras = ["All", ...albums.map((a) => a.title)];
   const filtered = era === "All" ? videos : videos.filter((v) => v.era === era);
@@ -53,7 +69,7 @@ function VideosPage() {
               <div key={v.id} className="group">
                 <div className="relative mb-4 aspect-video overflow-hidden bg-neutral-900">
                   <iframe
-                    src={`https://www.youtube.com/embed/${v.youtubeId}`}
+                    src={`https://www.youtube.com/embed/${v.youtube_id}`}
                     title={v.title}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
@@ -81,7 +97,7 @@ function VideosPage() {
             {albums.map((a) => (
               <div key={a.slug} className="group relative aspect-[4/5] overflow-hidden bg-neutral-900">
                 <img
-                  src={a.cover}
+                  src={getAlbumCover(a.slug, a.cover_url)}
                   alt={a.title}
                   width={800}
                   height={1000}
