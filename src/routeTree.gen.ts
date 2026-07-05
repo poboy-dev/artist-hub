@@ -24,10 +24,12 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAdminVideosRouteImport } from './routes/_authenticated/admin/videos'
 import { Route as AuthenticatedAdminTourRouteImport } from './routes/_authenticated/admin/tour'
+import { Route as AuthenticatedAdminStoreRouteImport } from './routes/_authenticated/admin/store'
 import { Route as AuthenticatedAdminOrdersRouteImport } from './routes/_authenticated/admin/orders'
 import { Route as AuthenticatedAdminNewsRouteImport } from './routes/_authenticated/admin/news'
 import { Route as AuthenticatedAdminMusicRouteImport } from './routes/_authenticated/admin/music'
 import { Route as AuthenticatedAdminFanClubRouteImport } from './routes/_authenticated/admin/fan-club'
+import { Route as AuthenticatedAdminCompositionsRouteImport } from './routes/_authenticated/admin/compositions'
 
 const VideosRoute = VideosRouteImport.update({
   id: '/videos',
@@ -104,6 +106,11 @@ const AuthenticatedAdminTourRoute = AuthenticatedAdminTourRouteImport.update({
   path: '/tour',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminStoreRoute = AuthenticatedAdminStoreRouteImport.update({
+  id: '/store',
+  path: '/store',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 const AuthenticatedAdminOrdersRoute =
   AuthenticatedAdminOrdersRouteImport.update({
     id: '/orders',
@@ -126,6 +133,12 @@ const AuthenticatedAdminFanClubRoute =
     path: '/fan-club',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminCompositionsRoute =
+  AuthenticatedAdminCompositionsRouteImport.update({
+    id: '/compositions',
+    path: '/compositions',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -139,10 +152,12 @@ export interface FileRoutesByFullPath {
   '/tour': typeof TourRoute
   '/videos': typeof VideosRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/admin/compositions': typeof AuthenticatedAdminCompositionsRoute
   '/admin/fan-club': typeof AuthenticatedAdminFanClubRoute
   '/admin/music': typeof AuthenticatedAdminMusicRoute
   '/admin/news': typeof AuthenticatedAdminNewsRoute
   '/admin/orders': typeof AuthenticatedAdminOrdersRoute
+  '/admin/store': typeof AuthenticatedAdminStoreRoute
   '/admin/tour': typeof AuthenticatedAdminTourRoute
   '/admin/videos': typeof AuthenticatedAdminVideosRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
@@ -158,10 +173,12 @@ export interface FileRoutesByTo {
   '/store': typeof StoreRoute
   '/tour': typeof TourRoute
   '/videos': typeof VideosRoute
+  '/admin/compositions': typeof AuthenticatedAdminCompositionsRoute
   '/admin/fan-club': typeof AuthenticatedAdminFanClubRoute
   '/admin/music': typeof AuthenticatedAdminMusicRoute
   '/admin/news': typeof AuthenticatedAdminNewsRoute
   '/admin/orders': typeof AuthenticatedAdminOrdersRoute
+  '/admin/store': typeof AuthenticatedAdminStoreRoute
   '/admin/tour': typeof AuthenticatedAdminTourRoute
   '/admin/videos': typeof AuthenticatedAdminVideosRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
@@ -180,10 +197,12 @@ export interface FileRoutesById {
   '/tour': typeof TourRoute
   '/videos': typeof VideosRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/_authenticated/admin/compositions': typeof AuthenticatedAdminCompositionsRoute
   '/_authenticated/admin/fan-club': typeof AuthenticatedAdminFanClubRoute
   '/_authenticated/admin/music': typeof AuthenticatedAdminMusicRoute
   '/_authenticated/admin/news': typeof AuthenticatedAdminNewsRoute
   '/_authenticated/admin/orders': typeof AuthenticatedAdminOrdersRoute
+  '/_authenticated/admin/store': typeof AuthenticatedAdminStoreRoute
   '/_authenticated/admin/tour': typeof AuthenticatedAdminTourRoute
   '/_authenticated/admin/videos': typeof AuthenticatedAdminVideosRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -202,10 +221,12 @@ export interface FileRouteTypes {
     | '/tour'
     | '/videos'
     | '/admin'
+    | '/admin/compositions'
     | '/admin/fan-club'
     | '/admin/music'
     | '/admin/news'
     | '/admin/orders'
+    | '/admin/store'
     | '/admin/tour'
     | '/admin/videos'
     | '/admin/'
@@ -221,10 +242,12 @@ export interface FileRouteTypes {
     | '/store'
     | '/tour'
     | '/videos'
+    | '/admin/compositions'
     | '/admin/fan-club'
     | '/admin/music'
     | '/admin/news'
     | '/admin/orders'
+    | '/admin/store'
     | '/admin/tour'
     | '/admin/videos'
     | '/admin'
@@ -242,10 +265,12 @@ export interface FileRouteTypes {
     | '/tour'
     | '/videos'
     | '/_authenticated/admin'
+    | '/_authenticated/admin/compositions'
     | '/_authenticated/admin/fan-club'
     | '/_authenticated/admin/music'
     | '/_authenticated/admin/news'
     | '/_authenticated/admin/orders'
+    | '/_authenticated/admin/store'
     | '/_authenticated/admin/tour'
     | '/_authenticated/admin/videos'
     | '/_authenticated/admin/'
@@ -372,6 +397,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminTourRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/store': {
+      id: '/_authenticated/admin/store'
+      path: '/store'
+      fullPath: '/admin/store'
+      preLoaderRoute: typeof AuthenticatedAdminStoreRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/orders': {
       id: '/_authenticated/admin/orders'
       path: '/orders'
@@ -400,24 +432,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminFanClubRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/compositions': {
+      id: '/_authenticated/admin/compositions'
+      path: '/compositions'
+      fullPath: '/admin/compositions'
+      preLoaderRoute: typeof AuthenticatedAdminCompositionsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
   }
 }
 
 interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminCompositionsRoute: typeof AuthenticatedAdminCompositionsRoute
   AuthenticatedAdminFanClubRoute: typeof AuthenticatedAdminFanClubRoute
   AuthenticatedAdminMusicRoute: typeof AuthenticatedAdminMusicRoute
   AuthenticatedAdminNewsRoute: typeof AuthenticatedAdminNewsRoute
   AuthenticatedAdminOrdersRoute: typeof AuthenticatedAdminOrdersRoute
+  AuthenticatedAdminStoreRoute: typeof AuthenticatedAdminStoreRoute
   AuthenticatedAdminTourRoute: typeof AuthenticatedAdminTourRoute
   AuthenticatedAdminVideosRoute: typeof AuthenticatedAdminVideosRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminCompositionsRoute: AuthenticatedAdminCompositionsRoute,
   AuthenticatedAdminFanClubRoute: AuthenticatedAdminFanClubRoute,
   AuthenticatedAdminMusicRoute: AuthenticatedAdminMusicRoute,
   AuthenticatedAdminNewsRoute: AuthenticatedAdminNewsRoute,
   AuthenticatedAdminOrdersRoute: AuthenticatedAdminOrdersRoute,
+  AuthenticatedAdminStoreRoute: AuthenticatedAdminStoreRoute,
   AuthenticatedAdminTourRoute: AuthenticatedAdminTourRoute,
   AuthenticatedAdminVideosRoute: AuthenticatedAdminVideosRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
@@ -453,3 +496,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
