@@ -87,6 +87,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "SOLARI — Official Site" },
+      { name: "description", content: "Official site of SOLARI. Music, videos, tour dates, VIP experiences, merch, compositions, and fan club access." },
+      { property: "og:description", content: "Official site of SOLARI. Music, videos, tour dates, VIP experiences, merch, compositions, and fan club access." },
+      { name: "twitter:description", content: "Official site of SOLARI. Music, videos, tour dates, VIP experiences, merch, compositions, and fan club access." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/7e4c0b1c-baef-4b1d-9385-8e3b52ffe4f9" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/7e4c0b1c-baef-4b1d-9385-8e3b52ffe4f9" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
